@@ -2,6 +2,7 @@ package com.example.listaralumnos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.example.listaralumnos.utilidades.AlmacenCadenas;
 
 import java.util.List;
 
@@ -18,6 +22,8 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.AlumnoViewHolder> {
     private List<Alumno> alumnoList;
     private Context contextActivity;
+
+
 
     /**
      * Constructor del adaptador en el que seteamos el conjunto de alumnos y el contexto (Activity) sobre
@@ -63,16 +69,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.AlumnoViewHold
      */
     @Override
     public void onBindViewHolder(ListAdapter.AlumnoViewHolder holder, int position){
-        int pos = position;
-        holder.bindData(alumnoList.get(pos));
+        Alumno alumnoActual = alumnoList.get(position);
+        holder.bindData(alumnoActual);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int idAPasar = alumnoList.get(pos).getId();
+                int idAlumno = alumnoActual.getId();
 
                 Intent cambiarAct = new Intent (contextActivity, DetailActivity.class );
-                cambiarAct.putExtra("DATO_ID", idAPasar);
+                cambiarAct.putExtra(AlmacenCadenas.ID_ALUMNO, idAlumno);
                 contextActivity.startActivity(cambiarAct);
             }
         });
@@ -107,6 +113,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.AlumnoViewHold
         void bindData(final Alumno item){
             nombre.setText(item.getNombre());
             apellidos.setText(item.getApellido1() + " " + item.getApellido2());
+
+            String llamada = AlmacenCadenas.SERVICIO_IMAGEN_ALUMNO.replaceAll("XX", ""+item.getId());
+
+            Glide.with(contextActivity).
+                    load(Uri.decode(AlmacenCadenas.SERVICIO_IMAGEN_ALUMNO.replaceAll("XX", ""+item.getId()))).
+                    into(iconImage);
+
         }
     }
 }

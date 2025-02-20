@@ -13,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.listaralumnos.utilidades.AlmacenCadenas;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class DetailActivity extends AppCompatActivity {
-
     private TextView txtNombre;
     private TextView txtApellidos;
     private TextView txtCard;
@@ -48,12 +48,12 @@ public class DetailActivity extends AppCompatActivity {
 
         //Se recoge el dato que se ha pasado por el intent al clicar en el RecyclerView en la activity anterior
         Intent intent = getIntent();
-        int datoRecibido = intent.getIntExtra("DATO_ID",0);
+        int datoRecibido = intent.getIntExtra(AlmacenCadenas.ID_ALUMNO,0);
         // Añadimos al endpoint el parametro que hemos rescatado de la selección de la lista
-        final String BASE_URL = "https://idocentic.website/monroymanagement/services/readStudent.php?studentId=" + datoRecibido;
+        String url = AlmacenCadenas.SERVICIO_LEER_ALUMNO + "?studentId=" + datoRecibido;
 
         // Llamar a la función para realizar la solicitud Volley
-        requestAlumno(BASE_URL);
+        requestAlumno(url);
     }
 
     /*
